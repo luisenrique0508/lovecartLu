@@ -16,7 +16,677 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+.amor-titulo {:root {
+    --sobre-color: #f5f2ea;  /* Color perla más claro y elegante */
+    --sobre-sombra: #e8e3d8;
+    --carta-color: #fff;
+    --sello-color: #f8d7da;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #9fdcff;
+    font-family: 'Roboto', sans-serif;
+}
+
 .amor-titulo {
+    font-family: 'Dancing Script', cursive;
+    color: #dc3545;
+    font-size: 2.5rem;
+}
+
+.floating-heart {
+    position: fixed;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 1000;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    animation: floatHeart 2s ease-in-out infinite;
+}
+
+@keyframes floatHeart {
+    0% { 
+        transform: translateY(0) rotate(0deg) scale(0.5);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-50px) rotate(180deg) scale(1);
+        opacity: 0.9;
+    }
+    100% { 
+        transform: translateY(-100px) rotate(360deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.sobre-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    /* Establecer stacking context inicial */
+    z-index: 1;
+}
+
+.sobre {
+    position: relative;
+    width: 100%;
+    padding-top: 75%;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: all 0.8s ease;
+    background: var(--sobre-color);
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.sobre.abierto {
+    transform: none;
+}
+
+/* Agregar la solapa superior */
+.solapa-superior {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50%;
+    background: var(--sobre-color);
+    transform-origin: bottom;
+    z-index: 3;
+    clip-path: polygon(0 50%, 50% 100%, 100% 50%, 50% 0);  /* Forma de V */
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);  /* Animación más fluida */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    border-radius: 10px 10px 0 0;
+    border-bottom: 2px solid #b8a99a;  /* Línea para resaltar la V */
+}
+
+.sobre.abierto .solapa-superior {
+    transform: rotateX(180deg);
+    transition-delay: 0s;
+}
+
+/* Agregar después de la clase .solapa-superior */
+
+
+.sobre.abierto .solapa-carta {
+    transform: translate(-50%, -50%) rotateX(180deg);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.corazon-boton {
+    position: absolute;
+    top: 38%;  /* Ajustado más abajo para coincidir con el cruce */
+    left: 50%;  /* Centrado horizontal */
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: #f8d7da;
+    border-radius: 50%;
+    z-index: 40;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
+    border: 3px solid #e9ecef;
+    background-image: radial-gradient(circle at center, #fff5f5, var(--sello-color));
+}
+
+.corazon-boton:hover {
+    transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+    box-shadow: 3px 6px 12px rgba(0,0,0,0.2);
+}
+
+.corazon-boton::before {
+    content: "❤️";
+    font-size: 30px; /* Reducido de 36px */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.sobre.abierto .corazon-boton {
+    transform: translate(-50%, -50%) scale(0) rotate(45deg);
+    opacity: 0;
+}
+
+.sobre-cuerpo {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--sobre-color);
+    border-radius: 10px;
+    overflow: visible; /* Mantiene la visibilidad de la carta */
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+    /* Asegurarse que esté por debajo de la carta */
+    z-index: 1;
+}
+
+.sobre-frente {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    background: var(--sobre-color);
+    clip-path: polygon(0 100%, 50% 15%, 100% 100%); /* V extremadamente pronunciada */
+    z-index: 1; /* Asegurar que esté por debajo de la carta */
+    box-shadow: inset 0 -5px 15px rgba(0,0,0,0.1);
+    border-top: 6px solid #853535; /* Línea mucho más gruesa y visible (rojo oscuro) */
+    pointer-events: none; /* Permitir que la carta sea clickeable */
+}
+
+/* Línea V adicional para mayor visibilidad */
+.sobre-frente::before {
+    content: '';
+    position: absolute;
+    top: -3px; /* Ajustado para que se vea mejor */
+    left: 0;
+    width: 100%;
+    height: 2px; /* Línea más gruesa */
+    background: linear-gradient(to right, transparent 0%, transparent 40%, #e61e1e 45%, #e61e1e 55%, transparent 60%, transparent 100%);
+    z-index: 5;
+}
+
+/* Líneas que forman una V cruzando por el corazón */
+.linea-v-sello {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    background: transparent;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* Línea diagonal izquierda */
+.linea-v-sello::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 3px; /* Grosor de la línea */
+    background-color: #e61e1e;
+    transform-origin: top left;
+    transform: rotate(31deg); /* Ángulo ajustado para pasar por el corazón */
+    box-shadow: 0 0 8px rgba(230, 30, 30, 0.7);
+}
+
+/* Línea diagonal derecha */
+.linea-v-sello::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 3px; /* Grosor de la línea */
+    background-color: #e61e1e;
+    transform-origin: top right;
+    transform: rotate(-31deg); /* Ángulo ajustado para pasar por el corazón */
+    box-shadow: 0 0 8px rgba(230, 30, 30, 0.7);
+}
+
+/* Eliminando las líneas cruzadas y utilizando solo la forma V */
+
+/* Ya no necesitamos estos pseudo-elementos */
+
+.sobre-patron {
+    opacity: 0.05;  /* Reducido de 0.1 a 0.05 */
+    background-image: repeating-linear-gradient(45deg, #b8a99a 0, #b8a99a 1px, transparent 0, transparent 50%);  /* Cambiado de negro a un tono más suave */
+    background-size: 15px 15px;  /* Patrón más espaciado */
+}
+
+.carta {
+    position: absolute;
+    width: 85%;
+    max-width: 450px; /* Limitar ancho máximo */
+    left: 50%;  /* Centrado horizontal */
+    top: 50%;   /* Posición vertical */
+    transform: translate(-50%, -50%) scale(0.85);  /* Posición inicial */
+    background-color: white;
+    padding: 20px 30px; /* Más padding horizontal */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15); /* Sombra más prominente */
+    z-index: 999;  /* Valor extremadamente alto para estar siempre sobre el sobre */
+    border-radius: 12px;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);  /* Animación más fluida */
+    transform-origin: center center;  /* Punto de origen para la animación */
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity, z-index; /* Optimización para la GPU */
+    pointer-events: auto !important; /* Forzar que sea clickeable */
+}
+
+.sobre.abierto .carta {
+    transform: translate(-50%, -85%) rotateX(5deg);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0.3s;
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.sobre:not(.abierto) .linea-v-sello {
+    opacity: 1;
+}
+
+.sobre.abierto .carta:hover {
+    transform: translate(-50%, -85%) rotateX(5deg) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Ajustes para diseño responsive */
+@media (min-width: 769px) {
+    .carta {
+        width: 85%;
+        max-width: 600px;
+    }
+    
+    .sobre.abierto .carta {
+        transform: translate(-50%, -95%) rotateX(5deg);
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -95%) rotateX(5deg) scale(1.02);
+    }
+
+    .sobre-cuerpo {
+        z-index: 1 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .sobre {
+        margin-top: 50px;
+    }
+
+    .carta {
+        width: 90%;
+        padding: 20px;
+        font-size: 0.9em;
+    }
+
+    .carta h1 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+
+    .sobre.abierto .carta {
+        transform: translate(-50%, -65%) rotateX(5deg);
+    }
+
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -65%) rotateX(5deg) scale(1.02);
+    }
+
+    .linea-v-permanente {
+        width: 100px;
+        height: 75px;
+        top: -50px;
+    }
+    
+    .firma {
+        margin-top: 15px;
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 768px) {
+    .linea-v-permanente {
+        width: 100px;
+        height: 75px;
+        top: -50px;
+    }
+    
+    .firma {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carta {
+        width: 90%; /* Carta ajustada para pantallas pequeñas */
+    }
+    
+    .sobre.abierto .carta {
+        transform: translate(-50%, -45%) rotateX(5deg); /* Aún menos desplazamiento en dispositivos pequeños */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -45%) rotateX(5deg) scale(1.02);
+    }
+    
+    .linea-v-sello::before,
+    .linea-v-sello::after {
+        height: 4px; /* Líneas más delgadas en dispositivos pequeños */
+    }
+    
+    .carta-titulo {
+        font-size: 2rem; /* Título más pequeño en móviles */
+    }
+    
+    .carta-texto {
+        font-size: 1rem; /* Texto más pequeño en móviles */
+    }
+}
+
+.carta-contenido {
+    padding: 20px;
+    font-family: 'Dancing Script', cursive;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.carta-papel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #f7f1e3;
+    border-radius: 8px;
+    padding: 30px;
+    border: 2px solid #d4b895;
+    position: relative;
+    max-height: 70vh;
+    overflow-y: auto;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(167, 147, 114, 0.1) 2px,
+            rgba(167, 147, 114, 0.1) 3px
+        );
+}
+
+/* Estilo para la barra de scroll */
+.carta-papel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.carta-papel::-webkit-scrollbar-track {
+    background: rgba(212, 184, 149, 0.2);
+    border-radius: 4px;
+}
+
+.carta-papel::-webkit-scrollbar-thumb {
+    background: #d4b895;
+    border-radius: 4px;
+    border: 2px solid #f7f1e3;
+}
+
+.carta-papel::-webkit-scrollbar-thumb:hover {
+    background: #c4a785;
+}
+
+/* Efecto de borde desgastado */
+.carta-papel::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid #d4b895;
+    border-radius: 10px;
+    opacity: 0.5;
+    pointer-events: none;
+    filter: blur(1px);
+}
+
+/* Efecto de textura de papel */
+.carta-papel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/png;base64,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');
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.carta-titulo {
+    color: #853535; /* Color más oscuro para parecer tinta antigua */
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 2px rgba(133, 53, 53, 0.3);
+}
+
+.carta-texto {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #4a4a4a; /* Color más oscuro para mejor legibilidad */
+    text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.firma {
+    text-align: right;
+    font-size: 1.2rem;
+    margin-top: 30px;
+    position: relative;
+    z-index: 20;
+}
+
+.firma-texto {
+    display: block;
+    margin-bottom: 5px;
+    font-style: italic;
+    color: #555;
+}
+
+.firma-linea {
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+    margin-top: 10px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.firma-input {
+    width: 100%;
+    border: none;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    text-align: center;
+    outline: none;
+    background: transparent;
+    color: #853535;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.firma-input:focus {
+    color: #e61e1e;
+}
+
+.firma-input-modal {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid var(--sobre-sombra);
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4rem;
+    text-align: center;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s ease;
+}
+
+.firma-input-modal:focus {
+    border-color: #dc3545;
+}
+
+.modal-content {
+    border-radius: 15px;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 0.5rem 1.5rem 1.5rem;
+    color: #9aff93;
+}
+
+.btn-primary {
+    background: var(--sobre-sombra);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 25px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: var(--sobre-color);
+    transform: scale(1.05);
+}
+
+@keyframes latido {
+    0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 5px rgba(220, 53, 69, 0.4)); }
+    50% { transform: scale(1.25); filter: brightness(1.3) drop-shadow(0 0 8px rgba(220, 53, 69, 0.6)); }
+    100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 5px rgba(220, 53, 69, 0.4)); }
+}
+
+@media (max-width: 768px) {
+    .sobre-container {
+        margin-top: -20px;
+    }
+
+    .carta {
+        top: -30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sobre-container {
+        padding: 10px;
+        width: 100%;  /* Ajustado para usar todo el ancho disponible */
+        margin-top: -20px;
+    }
+    
+    .sobre {
+        padding-top: 100%;  /* Aumentado para más espacio vertical */
+    }
+    
+    .carta {
+        width: 92%;
+        height: auto;
+        min-height: 94%;
+        max-height: 80vh;
+    }
+    
+    .carta-contenido {
+        padding: 15px;
+        overflow-y: auto;  /* Permitir scroll si el contenido es muy largo */
+    }
+    
+    .sobre.abierto .carta {
+        transform: translate(-50%, -65%) rotateX(5deg);  /* Reducido de -85% a -65% */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -65%) rotateX(5deg) scale(1.02);
+    }
+    
+    .carta-texto {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 0.8rem;
+    }
+    
+    .firma {
+        margin-top: auto;
+        padding-top: 1rem;
+    }
+    
+    .corazon-boton {
+        width: 60px;
+        height: 60px;
+        top: 38%;  /* Mantener alineación en móviles */
+    }
+}
+
+@media (max-width: 320px) {
+    .sobre-container {
+        margin-top: -50px;
+    }
+    
+    .sobre {
+        padding-top: 100%;  /* Más espacio vertical para pantallas pequeñas */
+    }
+    
+    .carta {
+        width: 94%;
+        min-height: 86%;
+    }
+    
+    .sobre.abierto .carta {
+        transform: translate(-50%, -55%) rotateX(5deg);  /* Reducido de -75% a -55% */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -55%) rotateX(5deg) scale(1.02);
+    }
+    
+    .carta-texto {
+        font-size: 0.9rem;
+        line-height: 1.2;
+    }
+    
+    .firma {
+        font-size: 0.95rem;
+    }
+    
+    .firma-input {
+        font-size: 1.1rem;
+    }
+    
+    .corazon-boton {
+        width: 55px;
+        height: 55px;
+    }
+}
+
+@media (max-height: 700px) {
+    .sobre.abierto .carta {
+        transform: translate(-50%, -50%) rotateX(5deg);  /* Reducido de -70% a -50% */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -50%) rotateX(5deg) scale(1.02);
+    }
+    
+    .carta {
+        max-height: 75vh;
+    }
+    
+    .carta-contenido {
+        padding: 12px;
+    }
+}
     font-family: 'Dancing Script', cursive;
     color: #dc3545;
     font-size: 2.5rem;
