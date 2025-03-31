@@ -1,7 +1,7 @@
 let corazonesActivos = true;
 let ultimoCorazon = Date.now();
 const DELAY_ENTRE_CORAZONES = 15;
-const CORAZONES = [ '❤️'];
+const CORAZONES = [ '💘','❤️'];
 
 // Manejo de eventos tanto para mouse como para touch
 const crearCorazon = (x, y) => {
@@ -72,7 +72,8 @@ function cerrarSobre() {
     const carta = document.querySelector('.carta');
     const corazonBoton = document.querySelector('.corazon-boton');
     
-    carta.style.transform = 'translate(-50%, -50%)';
+    // Usar el mismo valor que en CSS para la posición inicial correcta
+    carta.style.transform = 'translate(-50%, -50%) scale(0.85)';
     carta.style.opacity = '0';
     
     setTimeout(() => {
@@ -115,20 +116,76 @@ function guardarFirma() {
     }
 }
 
-// Mejorar la animación de los corazones
+// Función mejorada para lanzar corazones
 function lanzarCorazones() {
-    const sobre = document.querySelector('.sobre');
-    const rect = sobre.getBoundingClientRect();
+    const container = document.querySelector('.sobre-container');
+    const rect = container.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-
-    for (let i = 0; i < 20; i++) {
+    
+    // Número de corazones
+    const numCorazones = 20; // Aumentado para mayor efecto
+    
+    // Crear los corazones
+    for (let i = 0; i < numCorazones; i++) {
         setTimeout(() => {
-            const angle = (i / 20) * Math.PI * 2;
-            const distance = 100;
-            const x = centerX + Math.cos(angle) * distance;
-            const y = centerY + Math.sin(angle) * distance;
-            crearCorazon(x, y);
-        }, i * 50);
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = '❤️';
+            
+            // Ángulo con un rango más concentrado en la parte superior (-70° a 70°)
+            const angulo = (Math.random() * 140 - 70) * Math.PI / 180;
+            const distancia = 80 + Math.random() * 120; // 80-200px
+            
+            // Posición inicial (centro del sobre)
+            heart.style.left = `${centerX}px`;
+            heart.style.top = `${centerY}px`;
+            
+            // Tamaño, rotación y animación aleatorios
+            const scale = 0.5 + Math.random() * 0.5;
+            heart.style.transform = `scale(${scale})`;
+            heart.style.opacity = '0';
+            
+            document.body.appendChild(heart);
+            
+            // Forzar un reflow para que la animación funcione
+            heart.offsetHeight;
+            heart.style.opacity = '0.8';
+            
+            // Animación con requestAnimationFrame para suavidad
+            let startTime = null;
+            const duracion = 1500 + Math.random() * 1000;
+            
+            function animateHeart(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / duracion;
+                
+                if (progress < 1) {
+                    // Trayectoria parabólica mejorada
+                    const x = centerX + Math.cos(angulo) * distancia * progress;
+                    // Movimiento hacia arriba con curva parabólica
+                    const y = centerY - Math.sin(Math.abs(angulo)) * distancia * progress - 120 * progress * progress;
+                    const currentScale = scale * (1 - progress * 0.5);
+                    const rotation = progress * 360 * (Math.random() > 0.5 ? 1 : -1);
+                    
+                    heart.style.left = `${x}px`;
+                    heart.style.top = `${y}px`;
+                    heart.style.transform = `scale(${currentScale}) rotate(${rotation}deg)`;
+                    
+                    // Opacidad gradual
+                    if (progress < 0.2) {
+                        heart.style.opacity = progress * 5; // Aparición rápida
+                    } else if (progress > 0.7) {
+                        heart.style.opacity = (1 - progress) * 3.33; // Desaparición gradual
+                    }
+                    
+                    requestAnimationFrame(animateHeart);
+                } else {
+                    heart.remove();
+                }
+            }
+            
+            requestAnimationFrame(animateHeart);
+        }, i * 70); // Intervalo más rápido
     }
 }

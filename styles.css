@@ -1,6 +1,6 @@
 :root {
-    --sobre-color: #f7efe2;  /* Color perla más suave y cálido */
-    --sobre-sombra: #eee4d3;
+    --sobre-color: #f5f2ea;  /* Color perla más claro y elegante */
+    --sobre-sombra: #e8e3d8;
     --carta-color: #fff;
     --sello-color: #f8d7da;
 }
@@ -167,9 +167,38 @@ body {
     width: 100%;
     height: 50%;
     background: var(--sobre-color);
-    clip-path: polygon(0 100%, 50% 50%, 100% 100%);
-    z-index: 2;
+    clip-path: polygon(0 100%, 50% 15%, 100% 100%); /* V extremadamente pronunciada */
+    z-index: 4; /* Aumentado para mayor visibilidad */
     box-shadow: inset 0 -5px 15px rgba(0,0,0,0.1);
+    border-top: 6px solid #853535; /* Línea mucho más gruesa y visible (rojo oscuro) */
+}
+
+/* Línea V adicional para mayor visibilidad */
+.sobre-frente::before {
+    content: '';
+    position: absolute;
+    top: -3px; /* Ajustado para que se vea mejor */
+    left: 0;
+    width: 100%;
+    height: 10px; /* Línea más gruesa */
+    background: linear-gradient(to right, transparent 0%, transparent 40%, #e61e1e 45%, #e61e1e 55%, transparent 60%, transparent 100%);
+    z-index: 5;
+}
+
+/* Línea V permanente para el corazón */
+.linea-v-permanente {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 90px;
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    background: transparent;
+    border: 5px solid #e61e1e;
+    border-bottom: none;
+    z-index: 20;
+    pointer-events: none;
 }
 
 .sobre-patron {
@@ -196,15 +225,48 @@ body {
 }
 
 .sobre.abierto .carta {
-    transform: translate(-50%, -120%) rotateX(5deg);  /* Añadido rotateX para efecto 3D */
+    transform: translate(-50%, -75%) rotateX(5deg);  /* Baja aún más la carta para mejor visualización */
     opacity: 1;
     visibility: visible;
     transition-delay: 0.3s;  /* Sincrónico con la solapa */
 }
 
 .sobre.abierto .carta:hover {
-    transform: translate(-50%, -120%) rotateX(5deg) scale(1.02);
+    transform: translate(-50%, -75%) rotateX(5deg) scale(1.02);
     box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Ajustes para diseño responsive */
+@media (max-width: 768px) {
+    .sobre.abierto .carta {
+        transform: translate(-50%, -60%) rotateX(5deg); /* Menos desplazamiento en dispositivos móviles */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -60%) rotateX(5deg) scale(1.02);
+    }
+    
+    .linea-v-permanente {
+        width: 100px; /* Línea V un poco más pequeña en móviles */
+        height: 75px;
+        top: -50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sobre.abierto .carta {
+        transform: translate(-50%, -50%) rotateX(5deg); /* Aún menos desplazamiento en dispositivos pequeños */
+    }
+    
+    .sobre.abierto .carta:hover {
+        transform: translate(-50%, -50%) rotateX(5deg) scale(1.02);
+    }
+    
+    .linea-v-permanente {
+        width: 80px; /* Línea V más pequeña en dispositivos muy pequeños */
+        height: 60px;
+        top: -40px;
+    }
 }
 
 .carta-contenido {
