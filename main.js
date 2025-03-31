@@ -1,6 +1,6 @@
 let corazonesActivos = true;
 let ultimoCorazon = Date.now();
-const DELAY_ENTRE_CORAZONES = 15;
+const DELAY_ENTRE_CORAZONES = 10;
 const CORAZONES = [ '💘','❤️'];
 
 // Manejo de eventos tanto para mouse como para touch
@@ -49,18 +49,38 @@ function abrirSobre() {
     const sobre = document.querySelector('.sobre');
     const carta = document.querySelector('.carta');
     const corazonBoton = document.querySelector('.corazon-boton');
+    const lineasV = document.querySelector('.linea-v-sello');
     const estaAbierto = sobre.classList.contains('abierto');
     
     if (!estaAbierto) {
+        // Ocultar las líneas rojas inmediatamente
+        lineasV.style.opacity = '0';
+
+        // Asegurarnos que la carta tenga el z-index correcto inmediatamente 
+        carta.style.zIndex = '9999';
+        
+        // Forzar que el sobre esté por debajo
+        document.querySelectorAll('.sobre-cuerpo, .sobre-frente').forEach(elem => {
+            elem.style.zIndex = '1';
+        });
+        
+        // Añadimos la clase para abrir el sobre
         sobre.classList.add('abierto');
         
         // Animación mejorada del sello
         corazonBoton.style.transform = 'translate(-50%, -50%) scale(0.8) rotate(10deg)';
         corazonBoton.style.opacity = '0';
         
+        // Eliminamos estilos inline que puedan interferir con la transición
+        carta.style.removeProperty('transform');
+        
+        // Forzar un reflow para aplicar los cambios inmediatamente
+        carta.offsetHeight;
+        
         setTimeout(() => {
             carta.style.visibility = 'visible';
             carta.style.opacity = '1';
+            carta.style.pointerEvents = 'auto'; // Asegurar que sea clickeable
             carta.onclick = cerrarSobre;
             setTimeout(lanzarCorazones, 300);
         }, 400);
@@ -71,9 +91,25 @@ function cerrarSobre() {
     const sobre = document.querySelector('.sobre');
     const carta = document.querySelector('.carta');
     const corazonBoton = document.querySelector('.corazon-boton');
+    const lineasV = document.querySelector('.linea-v-sello');
     
-    // Usar el mismo valor que en CSS para la posición inicial correcta
-    carta.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    // Guardar las dimensiones actuales de la pantalla
+    const anchoPantalla = window.innerWidth;
+    
+    // Ajustar la transformación según el tamaño de la pantalla
+    if (anchoPantalla <= 480) {
+        carta.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    } else if (anchoPantalla <= 768) {
+        carta.style.transform = 'translate(-50%, -55%) scale(0.85)';
+    } else {
+        carta.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    }
+
+    // Mostrar las líneas rojas
+    setTimeout(() => {
+        lineasV.style.opacity = '1';
+    }, 300);
+    
     carta.style.opacity = '0';
     
     setTimeout(() => {

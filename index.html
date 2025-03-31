@@ -31,7 +31,7 @@
             <input
               type="text"
               class="firma-input-modal"
-              placeholder="Escribe tu firma aquí..."
+              placeholder="Escribe aquí..."
               maxlength="30"
             />
           </div>
@@ -40,6 +40,7 @@
               type="button"
               class="btn btn-primary"
               onclick="guardarFirma()"
+              
             >
               Guardar
             </button>
@@ -56,15 +57,15 @@
           <div class="sobre-container">
             <div class="sobre">
               <div class="solapa"></div>
-              <!-- Botón del corazón con línea V integrada -->
-              <div class="corazon-boton" onclick="abrirSobre()">
-                <div class="linea-v-permanente"></div>
-              </div>
+              <!-- Línea en V que cruza el corazón -->
+              <div class="linea-v-sello"></div>
+              
+              <!-- Botón del corazón con posición forzada para centar en las líneas -->
+              <div class="corazon-boton" onclick="abrirSobre()" style="top: 32%;"></div>
               <div class="sobre-cuerpo">
                 <div class="sobre-patron"></div>
                 <div class="sobre-frente"></div>
-                <!-- Elemento específico para la línea V -->
-                <div class="linea-v"></div>
+                <!-- La línea V está ahora en el corazón-botón -->
               </div>
 
               <div class="carta">
@@ -82,7 +83,7 @@
                       pueden describir.
                     </p>
                     <div class="firma mt-4">
-                      Con todo mi amor,
+                      <span class="firma-texto">Con todo mi amor,</span>
                       <div class="firma-linea">
                         <input
                           type="text"
